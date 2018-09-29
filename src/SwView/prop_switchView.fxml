@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SwControler.PropControl">
+    <items>
+        <TextField prefHeight="407.0" prefWidth="296.0" />
+        <VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="160.0">
+            <children>
+                <ImageView fitHeight="197.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../../Downloads/TCC1/Fontes/mer000636001.jpg" />
+                    </image>
+                    <effect>
+                        <Reflection />
+                    </effect>
+                    <rotationAxis>
+                        <Point3D x="180.0" z="1.0" />
+                    </rotationAxis>
+                </ImageView>
+                <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="158.0">
+                    <children>
+                        <Label id="switchConfigLink" layoutX="7.0" layoutY="108.0" text="Configurações">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label id="switchInfoLink" layoutX="7.0" layoutY="173.0" text="Informações">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label id="switchConsoleLink" layoutX="7.0" layoutY="141.0" text="Console">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+            </children>
+        </VBox>
+    </items>
+</SplitPane>
