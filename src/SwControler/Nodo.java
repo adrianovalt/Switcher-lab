@@ -5,6 +5,7 @@
  */
 package SwControler;
 
+import static SwControler.MainControl.mainPane;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.animation.KeyFrame;
@@ -14,7 +15,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -27,16 +27,15 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 /**
- *
  * @author Adriano Valt <adrianovalt@gmail.com>
  */
 public class Nodo {
 
-    private MainControl getS;
+    private String buttonPress;
 
     private void conecartNodo(Node n1, Node n2) {
         if (n1.getParent() != n2.getParent()) {
-            throw new IllegalArgumentException("Nodes are in different containers");
+            throw new IllegalArgumentException("Os nodos estão em containers diferentes");
         }
         Pane parent = (Pane) n1.getParent();
         Line line = new Line();
@@ -79,7 +78,7 @@ public class Nodo {
         return selectedImage;
     }
 
-    protected void manipulaNodo(Node node, String buttonPress) {
+    protected void manipulaNodo(Node node) {
         final Posicao novaPosicao = new Posicao();
         //O comando setOnMouseEntered executa uma ação ao passar o mouse por
         //sobre o componente Node, no caso abaixo, altero o cursor do mouse
@@ -118,9 +117,13 @@ public class Nodo {
             if (!me.isPrimaryButtonDown()) {
                 node.getScene().setCursor(Cursor.DEFAULT);
             }
+            System.out.println("foi pressionado " + buttonPress);
+            //if(buttonPress.equals("delete")){
+            System.out.println("esse é o id do obj = " + mainPane.getChildren().get(0).getId());
+            mainPane.getChildren().remove(0);
+            //}
             novaPosicao.x = me.getX();
             novaPosicao.y = me.getY();
-
         });
         node.setOnMouseReleased(me -> {
             if (!me.isPrimaryButtonDown()) {
@@ -131,23 +134,19 @@ public class Nodo {
             node.setLayoutX(node.getLayoutX() + me.getX() - novaPosicao.x);
             node.setLayoutY(node.getLayoutY() + me.getY() - novaPosicao.y);
         });
-
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent me) {
-                System.out.println("Entrei ate aqui");
-                if (buttonPress.equals("play")) {
-                    System.out.println("entrei aqui");
-                    Main.alternaTela("prop");
-                }
-            }
-        });
     }
 
     private class Posicao {
 
         public double x;
         public double y;
+    }
+
+    /**
+     * @param buttonPress the buttonPress to set
+     */
+    public void setButtonPress(String buttonPress) {
+        this.buttonPress = buttonPress;
     }
 
 }

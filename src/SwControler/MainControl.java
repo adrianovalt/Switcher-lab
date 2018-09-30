@@ -3,8 +3,6 @@ package SwControler;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,9 +19,6 @@ import javafx.scene.layout.Pane;
  * @author Adriano Valt <adrianovalt@gmail.com>
  */
 public class MainControl implements Initializable {
-
-    private String buttonPress = "";
-    private String itemSetPress = "";
 
     @FXML
     private Button computerButton;
@@ -49,8 +44,10 @@ public class MainControl implements Initializable {
     private Button playButton;
     @FXML
     private BorderPane borderPane;
-    //@FXML 
-    private Pane mainPane;
+
+    protected static Pane mainPane;
+    private String buttonPress = "";
+    private String itemSetPress = "";
 
     @FXML
     protected void btAbrirMenuAction(ActionEvent e) {
@@ -72,7 +69,7 @@ public class MainControl implements Initializable {
 
     @FXML
     protected void deleteButtonAction(ActionEvent event) {
-        buttonPress = "delete";
+        setButtonState("delete");
         computerButton.setDisable(true);
         printerButton.setDisable(true);
         phoneButton.setDisable(true);
@@ -84,13 +81,11 @@ public class MainControl implements Initializable {
     @FXML
     protected void saveButtonAction(ActionEvent event) {
         buttonPress = "save";
-        //rightVBox.set
     }
 
     @FXML
     protected void reportButtonAction(ActionEvent event) {
         buttonPress = "report";
-        //rightVBox.set
     }
 
     @FXML
@@ -107,37 +102,31 @@ public class MainControl implements Initializable {
     @FXML
     protected void computerButtonAction(ActionEvent event) {
         itemSetPress = "appIcons/computer-72x72.PNG";
-        //rightVBox.set
     }
 
     @FXML
     protected void printerButtonAction(ActionEvent event) {
         itemSetPress = "appIcons/printer-72x72.PNG";
-        //rightVBox.set
     }
 
     @FXML
     protected void phoneButtonAction(ActionEvent event) {
         itemSetPress = "appIcons/phone-72x72.PNG";
-        //rightVBox.set
     }
 
     @FXML
     protected void switchButtonAction(ActionEvent event) {
         itemSetPress = "appIcons/switch-72x72.PNG";
-        //rightVBox.set
     }
 
     @FXML
     protected void hubButtonAction(ActionEvent event) {
         itemSetPress = "appIcons/hub-72x72.PNG";
-        //rightVBox.set
     }
 
     @FXML
     protected void lineButtonAction(ActionEvent event) {
         buttonPress = "line";
-        //rightVBox.set
     }
 
     @Override
@@ -147,21 +136,19 @@ public class MainControl implements Initializable {
         mainPane.setStyle(cssDefault);
         borderPane.setCenter(mainPane);
 
-        System.out.println("Butoon press? " + buttonPress);
-
-        System.out.println("Butoon press? " + buttonPress);
         mainPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent me) {
+                Nodo unidade = new Nodo();
                 if (buttonPress.equals("edit")) {
-                    Nodo unidade = new Nodo();
+
                     try {
                         final ImageView obj = unidade.createDragImage(me.getX(), me.getY(), itemSetPress);
                         mainPane.getChildren().add(obj);
-                        unidade.manipulaNodo(obj, buttonPress);
+                        unidade.manipulaNodo(obj);
+                        unidade.setButtonPress("edit");
                     } catch (FileNotFoundException ex) {
-                        Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
                         System.out.println("Selecione na barra de equipamentos um item antes de clicar");
                     }
                 }

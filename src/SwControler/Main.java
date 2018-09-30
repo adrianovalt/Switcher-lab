@@ -22,7 +22,7 @@ public class Main extends Application {
 
         Parent fxmlMain = FXMLLoader.load(getClass().getResource("/SwView/mainView.fxml"));
         mainScene = new Scene(fxmlMain, 1200, 678);
-        
+
         Parent fxmlprop = FXMLLoader.load(getClass().getResource("/SwView/prop_switchView.fxml"));
         propScene = new Scene(fxmlprop, 1360, 678);
 
