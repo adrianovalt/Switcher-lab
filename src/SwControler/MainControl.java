@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -46,19 +47,21 @@ public class MainControl implements Initializable {
     private BorderPane borderPane;
 
     protected static Pane mainPane;
-    private String buttonPress = "";
+    private static String buttonPress = "";
     private String itemSetPress = "";
 
     @FXML
-    protected void btAbrirMenuAction(ActionEvent e) {
-        System.out.println("Teste");
-        Main.alternaTela("prop");
+    protected void aboutMenuAction(ActionEvent event) {
+        Alert aboutInfo = new Alert(Alert.AlertType.INFORMATION);
+        aboutInfo.setTitle("About");
+        aboutInfo.setHeaderText("Switcher");
+        aboutInfo.setContentText("Desenvolvido por: Adriano Valt!\n2018");
+        aboutInfo.showAndWait();
     }
 
     @FXML
     protected void editButtonAction(ActionEvent event) {
         setButtonState("edit");
-        System.out.println("Butoon press? " + buttonPress);
         computerButton.setDisable(false);
         printerButton.setDisable(false);
         phoneButton.setDisable(false);
@@ -90,7 +93,7 @@ public class MainControl implements Initializable {
 
     @FXML
     protected void playButtonAction(ActionEvent event) {
-        buttonPress = "play";
+        setButtonState("play");
         computerButton.setDisable(true);
         printerButton.setDisable(true);
         phoneButton.setDisable(true);
@@ -141,7 +144,7 @@ public class MainControl implements Initializable {
             @Override
             public void handle(MouseEvent me) {
                 Nodo unidade = new Nodo();
-                if (buttonPress.equals("edit")) {
+                if (getButtonPress().equals("edit")) {
 
                     try {
                         final ImageView obj = unidade.createDragImage(me.getX(), me.getY(), itemSetPress);
@@ -193,4 +196,12 @@ public class MainControl implements Initializable {
     public void setButtonState(String state) {
         this.buttonPress = state;
     }
+
+    /**
+     * @return the buttonPress
+     */
+    public static String getButtonPress() {
+        return buttonPress;
+    }
+
 }

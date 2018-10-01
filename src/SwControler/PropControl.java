@@ -5,10 +5,16 @@
  */
 package SwControler;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+
 /**
- *
  * @author Adriano Valt <adrianovalt@gmail.com>
  */
 public class PropControl {
-    
+
+    @FXML
+    protected void backAction(ActionEvent event) {
+        Main.alternaTela("main");
+    }
 }

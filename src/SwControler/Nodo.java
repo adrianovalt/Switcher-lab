@@ -32,6 +32,7 @@ import javafx.util.Duration;
 public class Nodo {
 
     private String buttonPress;
+    private int position;
 
     private void conecartNodo(Node n1, Node n2) {
         if (n1.getParent() != n2.getParent()) {
@@ -95,6 +96,8 @@ public class Nodo {
             KeyFrame kf = new KeyFrame(Duration.millis(200), kv1, kv2);
             timeE.getKeyFrames().add(kf);
             timeE.play();
+            setButtonPress(MainControl.getButtonPress());
+            setPosition(mainPane.getChildren().indexOf(node));
         });
         //O comando setOnMouseExited executa uma ação ao passar o mouse por
         //sobre o componente Node, no caso abaixo, altero o cursor do mouse
@@ -118,10 +121,13 @@ public class Nodo {
                 node.getScene().setCursor(Cursor.DEFAULT);
             }
             System.out.println("foi pressionado " + buttonPress);
-            //if(buttonPress.equals("delete")){
+            if(buttonPress.equals("delete")){
             System.out.println("esse é o id do obj = " + mainPane.getChildren().get(0).getId());
-            mainPane.getChildren().remove(0);
-            //}
+            mainPane.getChildren().remove(position);
+            }
+            if(buttonPress.equals("play")){
+            Main.alternaTela("prop");
+            }
             novaPosicao.x = me.getX();
             novaPosicao.y = me.getY();
         });
@@ -147,6 +153,10 @@ public class Nodo {
      */
     public void setButtonPress(String buttonPress) {
         this.buttonPress = buttonPress;
+    }
+    
+    public void setPosition(int pos){
+        this.position = pos;
     }
 
 }
