@@ -12,11 +12,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -34,32 +31,7 @@ public class Nodo {
     private String buttonPress;
     private int position;
 
-    private void conecartNodo(Node n1, Node n2) {
-        if (n1.getParent() != n2.getParent()) {
-            throw new IllegalArgumentException("Os nodos estão em containers diferentes");
-        }
-        Pane parent = (Pane) n1.getParent();
-        Line line = new Line();
-        line.startXProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = n1.getBoundsInParent();
-            return b.getMinX() + b.getWidth() / 2;
-        }, n1.boundsInParentProperty()));
-        line.startYProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = n1.getBoundsInParent();
-            return b.getMinY() + b.getHeight() / 2;
-        }, n1.boundsInParentProperty()));
-        line.endXProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = n2.getBoundsInParent();
-            return b.getMinX() + b.getWidth() / 2;
-        }, n2.boundsInParentProperty()));
-        line.endYProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = n2.getBoundsInParent();
-            return b.getMinY() + b.getHeight() / 2;
-        }, n2.boundsInParentProperty()));
-        parent.getChildren().add(line);
-    }
-
-    protected static ImageView createDragImage(double x, double y, String caminho) throws FileNotFoundException {
+    protected static ImageView criarItem(double x, double y, String caminho) throws FileNotFoundException {
         ImageView selectedImage = new ImageView();
         Image imageX = new Image(new FileInputStream(caminho));
         selectedImage.setImage(imageX);
@@ -67,26 +39,23 @@ public class Nodo {
         selectedImage.setLayoutY(y - 36);
         selectedImage.setFitHeight(72);
         selectedImage.setFitWidth(72);
-
-        ObjectProperty<Point2D> mouseLoc = new SimpleObjectProperty<>();
-        selectedImage.setOnMousePressed(e -> mouseLoc.set(new Point2D(e.getX(), e.getY())));
-        selectedImage.setOnMouseDragged(e -> {
-            double deltaX = e.getX() - mouseLoc.get().getX();
-            double deltaY = e.getY() - mouseLoc.get().getY();
-            mouseLoc.set(new Point2D(e.getX(), e.getY()));
-        });
         selectedImage.addEventFilter(MouseEvent.MOUSE_CLICKED, Event::consume);
         return selectedImage;
     }
 
-    protected void manipulaNodo(Node node) {
+    protected void manipulaItem(Node node) {
         final Posicao novaPosicao = new Posicao();
+
         //O comando setOnMouseEntered executa uma ação ao passar o mouse por
         //sobre o componente Node, no caso abaixo, altero o cursor do mouse
         //para uma mão.
         node.setOnMouseEntered(me -> {
             if (!me.isPrimaryButtonDown()) {
-                node.getScene().setCursor(Cursor.HAND);
+                if (!buttonPress.equals("delete")) {
+                    node.getScene().setCursor(Cursor.HAND);
+                } else {
+                    node.getScene().setCursor(Cursor.CROSSHAIR);
+                }
             }
             //O comando abaixo faz com que o componente node aumente sua
             //escala ao passar o mouse por sobre ele
@@ -120,13 +89,22 @@ public class Nodo {
             if (!me.isPrimaryButtonDown()) {
                 node.getScene().setCursor(Cursor.DEFAULT);
             }
-            System.out.println("foi pressionado " + buttonPress);
-            if(buttonPress.equals("delete")){
-            System.out.println("esse é o id do obj = " + mainPane.getChildren().get(0).getId());
-            mainPane.getChildren().remove(position);
+            if (buttonPress.equals("line")) {
+                if (MainControl.lastUnconnectedNode.get() == null) {
+                    MainControl.lastUnconnectedNode.setValue(mainPane.getChildren().get(position));
+                } else {
+                    conectarItem(MainControl.lastUnconnectedNode.get(), mainPane.getChildren().get(position));
+                    MainControl.lastUnconnectedNode.set(null);
+                }
             }
-            if(buttonPress.equals("play")){
-            Main.alternaTela("prop");
+            System.out.println("foi pressionado " + buttonPress);
+            if (buttonPress.equals("delete")) {
+                System.out.println("esse é o id do obj = " + mainPane.getChildren().get(0).getId());
+                mainPane.getChildren().remove(position);
+                return;
+            }
+            if (buttonPress.equals("play")) {
+                Main.alternaTela("prop");
             }
             novaPosicao.x = me.getX();
             novaPosicao.y = me.getY();
@@ -142,21 +120,42 @@ public class Nodo {
         });
     }
 
+    private void conectarItem(Node n1, Node n2) {
+        if (n1.getParent() != n2.getParent()) {
+            throw new IllegalArgumentException("Os nodos estão em containers diferentes");
+        }
+        Pane parent = (Pane) n1.getParent();
+        Line line = new Line();
+        line.startXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = n1.getBoundsInParent();
+            return b.getMinX() + b.getWidth() / 2;
+        }, n1.boundsInParentProperty()));
+        line.startYProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = n1.getBoundsInParent();
+            return b.getMinY() + b.getHeight() / 2;
+        }, n1.boundsInParentProperty()));
+        line.endXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = n2.getBoundsInParent();
+            return b.getMinX() + b.getWidth() / 2;
+        }, n2.boundsInParentProperty()));
+        line.endYProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = n2.getBoundsInParent();
+            return b.getMinY() + b.getHeight() / 2;
+        }, n2.boundsInParentProperty()));
+        parent.getChildren().add(line);
+    }
+
     private class Posicao {
 
         public double x;
         public double y;
     }
 
-    /**
-     * @param buttonPress the buttonPress to set
-     */
     public void setButtonPress(String buttonPress) {
         this.buttonPress = buttonPress;
     }
-    
-    public void setPosition(int pos){
+
+    public void setPosition(int pos) {
         this.position = pos;
     }
-
 }

@@ -11,22 +11,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SwControler.PropControl">
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+           prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SwControler.PropControl">
     <items>
         <TextField prefHeight="407.0" prefWidth="296.0" />
-        <VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="160.0">
+        <VBox fx:id="rightVBox" alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="160.0">
             <children>
-                <ImageView fitHeight="197.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../images/download.jpg" />
-                    </image>
-                    <effect>
-                        <Reflection />
-                    </effect>
-                    <rotationAxis>
-                        <Point3D x="180.0" z="1.0" />
-                    </rotationAxis>
-                </ImageView>
+            <ImageView fx:id="computerImage" fitHeight="222.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
             <Button mnemonicParsing="false" onAction="#backAction" text="Voltar" />
                 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="171.0" prefWidth="158.0">
                     <children>

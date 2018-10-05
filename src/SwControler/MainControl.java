@@ -1,20 +1,30 @@
 package SwControler;
 
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javax.imageio.ImageIO;
 
 /**
  * @author Adriano Valt <adrianovalt@gmail.com>
@@ -46,7 +56,9 @@ public class MainControl implements Initializable {
     @FXML
     private BorderPane borderPane;
 
+    private ScrollPane basePane;
     protected static Pane mainPane;
+    protected static ObjectProperty<Node> lastUnconnectedNode;
     private static String buttonPress = "";
     private String itemSetPress = "";
 
@@ -87,8 +99,15 @@ public class MainControl implements Initializable {
     }
 
     @FXML
-    protected void reportButtonAction(ActionEvent event) {
+    protected void reportButtonAction(ActionEvent event) throws IOException {
         buttonPress = "report";
+        File file = new File("images/snap.png");
+        WritableImage snapShotPane = new WritableImage((int) mainPane.getWidth(),
+                (int) mainPane.getHeight());
+        mainPane.snapshot(null, snapShotPane);
+        RenderedImage renderedImage = SwingFXUtils.fromFXImage(snapShotPane, null);
+        //Write the snapshot to the chosen file
+        ImageIO.write(renderedImage, "png", file);
     }
 
     @FXML
@@ -134,10 +153,16 @@ public class MainControl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        mainPane = new Pane();
+        lastUnconnectedNode = new SimpleObjectProperty<>();
         final String cssDefault = "-fx-border-color: gray;-fx-border-width: 2;";
+        basePane = new ScrollPane();
+        mainPane = new Pane();
         mainPane.setStyle(cssDefault);
-        borderPane.setCenter(mainPane);
+        mainPane.setMinSize(1024, 648);
+        mainPane.setMaxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+        basePane.setContent(mainPane);
+        borderPane.setCenter(basePane);
 
         mainPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -145,11 +170,10 @@ public class MainControl implements Initializable {
             public void handle(MouseEvent me) {
                 Nodo unidade = new Nodo();
                 if (getButtonPress().equals("edit")) {
-
                     try {
-                        final ImageView obj = unidade.createDragImage(me.getX(), me.getY(), itemSetPress);
+                        final ImageView obj = unidade.criarItem(me.getX(), me.getY(), itemSetPress);
                         mainPane.getChildren().add(obj);
-                        unidade.manipulaNodo(obj);
+                        unidade.manipulaItem(obj);
                         unidade.setButtonPress("edit");
                     } catch (FileNotFoundException ex) {
                         System.out.println("Selecione na barra de equipamentos um item antes de clicar");
@@ -203,5 +227,4 @@ public class MainControl implements Initializable {
     public static String getButtonPress() {
         return buttonPress;
     }
-
 }
