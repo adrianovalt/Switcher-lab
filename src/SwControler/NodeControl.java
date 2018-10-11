@@ -6,6 +6,7 @@
 package SwControler;
 
 import static SwControler.MainControl.mainPane;
+import SwModel.Computer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.animation.KeyFrame;
@@ -26,14 +27,15 @@ import javafx.util.Duration;
 /**
  * @author Adriano Valt <adrianovalt@gmail.com>
  */
-public class Nodo {
+public class NodeControl {
 
-    private String buttonPress;
+    private static String buttonPress;
     private int position;
 
-    protected static ImageView criarItem(double x, double y, String caminho) throws FileNotFoundException {
+    protected static ImageView criarItem(double x, double y, String equip) throws FileNotFoundException {
         ImageView selectedImage = new ImageView();
-        Image imageX = new Image(new FileInputStream(caminho));
+        Image imageX = new Image(new FileInputStream(equip));
+        //selectedImage.setId();
         selectedImage.setImage(imageX);
         selectedImage.setLayoutX(x - 36);
         selectedImage.setLayoutY(y - 36);
@@ -67,6 +69,7 @@ public class Nodo {
             timeE.play();
             setButtonPress(MainControl.getButtonPress());
             setPosition(mainPane.getChildren().indexOf(node));
+            System.out.println("" + mainPane.getChildren().get(position).getLayoutX());
         });
         //O comando setOnMouseExited executa uma ação ao passar o mouse por
         //sobre o componente Node, no caso abaixo, altero o cursor do mouse
@@ -94,23 +97,27 @@ public class Nodo {
                     MainControl.lastUnconnectedNode.setValue(mainPane.getChildren().get(position));
                 } else {
                     conectarItem(MainControl.lastUnconnectedNode.get(), mainPane.getChildren().get(position));
+                    mainPane.getChildren().get(position).toFront();
                     MainControl.lastUnconnectedNode.set(null);
                 }
+                mainPane.getChildren().get(position).toFront();
             }
             System.out.println("foi pressionado " + buttonPress);
             if (buttonPress.equals("delete")) {
-                System.out.println("esse é o id do obj = " + mainPane.getChildren().get(0).getId());
+                System.out.println("esse é o id do obj = " + mainPane.getChildren().get(position).getId());
+
                 mainPane.getChildren().remove(position);
                 return;
             }
             if (buttonPress.equals("play")) {
                 Main.alternaTela("prop");
+                //mainPane.getChildren().get(position);
             }
             novaPosicao.x = me.getX();
             novaPosicao.y = me.getY();
         });
         node.setOnMouseReleased(me -> {
-            if (!me.isPrimaryButtonDown()) {
+            if (!me.isPrimaryButtonDown() && !buttonPress.equals("delete")) {
                 node.getScene().setCursor(Cursor.DEFAULT);
             }
         });
@@ -126,6 +133,7 @@ public class Nodo {
         }
         Pane parent = (Pane) n1.getParent();
         Line line = new Line();
+
         line.startXProperty().bind(Bindings.createDoubleBinding(() -> {
             Bounds b = n1.getBoundsInParent();
             return b.getMinX() + b.getWidth() / 2;
@@ -142,7 +150,9 @@ public class Nodo {
             Bounds b = n2.getBoundsInParent();
             return b.getMinY() + b.getHeight() / 2;
         }, n2.boundsInParentProperty()));
+        line.toBack();
         parent.getChildren().add(line);
+        manipulaItem(line);
     }
 
     private class Posicao {

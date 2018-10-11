@@ -1,5 +1,6 @@
 package SwControler;
 
+import SwModel.Computer;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,6 +25,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 
 /**
@@ -61,6 +63,7 @@ public class MainControl implements Initializable {
     protected static ObjectProperty<Node> lastUnconnectedNode;
     private static String buttonPress = "";
     private String itemSetPress = "";
+    WritableImage snapShotPane;
 
     @FXML
     protected void aboutMenuAction(ActionEvent event) {
@@ -94,15 +97,28 @@ public class MainControl implements Initializable {
     }
 
     @FXML
-    protected void saveButtonAction(ActionEvent event) {
+    protected void saveButtonAction(ActionEvent event) throws IOException {
         buttonPress = "save";
+        FileChooser fileChooser = new FileChooser();
+        
+        //File file = new File("images/snap.png");
+        File file = fileChooser.showSaveDialog(mainPane.getScene().getWindow());
+        /*WritableImage*/ snapShotPane = new WritableImage((int) mainPane.getWidth(),
+                (int) mainPane.getHeight());
+        mainPane.snapshot(null, snapShotPane);
+        
+        //Write the snapshot to the chosen file
+        if(file!=null){
+        RenderedImage renderedImage = SwingFXUtils.fromFXImage(snapShotPane, null);
+        ImageIO.write(renderedImage, "png", file);
+        }
     }
 
     @FXML
     protected void reportButtonAction(ActionEvent event) throws IOException {
         buttonPress = "report";
         File file = new File("images/snap.png");
-        WritableImage snapShotPane = new WritableImage((int) mainPane.getWidth(),
+        /*WritableImage*/ snapShotPane = new WritableImage((int) mainPane.getWidth(),
                 (int) mainPane.getHeight());
         mainPane.snapshot(null, snapShotPane);
         RenderedImage renderedImage = SwingFXUtils.fromFXImage(snapShotPane, null);
@@ -168,13 +184,18 @@ public class MainControl implements Initializable {
 
             @Override
             public void handle(MouseEvent me) {
-                Nodo unidade = new Nodo();
+                NodeControl item = new NodeControl();
+                Computer computer = new Computer();
+                AnimationControl anime = new AnimationControl();
                 if (getButtonPress().equals("edit")) {
                     try {
-                        final ImageView obj = unidade.criarItem(me.getX(), me.getY(), itemSetPress);
+                        final ImageView obj = item.criarItem(me.getX(), me.getY(), itemSetPress);
+                        obj.setUserData(computer);
                         mainPane.getChildren().add(obj);
-                        unidade.manipulaItem(obj);
-                        unidade.setButtonPress("edit");
+                        //anime.applyAnimation(mainPane);
+                        item.manipulaItem(obj);
+                        item.setButtonPress("edit");
+                        
                     } catch (FileNotFoundException ex) {
                         System.out.println("Selecione na barra de equipamentos um item antes de clicar");
                     }

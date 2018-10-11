@@ -30,6 +30,7 @@ public class Main extends Application {
         primaryStage.minHeightProperty().set(600);
         primaryStage.minWidthProperty().set(860);
         primaryStage.show();
+        
     }
 
     public static void alternaTela(String tela) {

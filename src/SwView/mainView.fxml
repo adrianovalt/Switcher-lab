@@ -54,7 +54,6 @@
                         <Button fx:id="phoneButton" disable="true" mnemonicParsing="false" onAction="#phoneButtonAction" />
                         <Button fx:id="switchButton" disable="true" mnemonicParsing="false" onAction="#switchButtonAction" />
                         <Button fx:id="hubButton" disable="true" mnemonicParsing="false" onAction="#hubButtonAction" />
-                        <Button fx:id="lineButton" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#lineButtonAction" />
                     </children>
                 </VBox>
             </right>
@@ -63,6 +62,7 @@
                     <children>
                         <Button fx:id="editButton" mnemonicParsing="false" onAction="#editButtonAction" />
                         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonAction" />
+                        <Button fx:id="lineButton" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#lineButtonAction" />
                         <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonAction" />
                         <Button fx:id="reportButton" mnemonicParsing="false" onAction="#reportButtonAction" />
                         <Button fx:id="playButton" mnemonicParsing="false" onAction="#playButtonAction" />
