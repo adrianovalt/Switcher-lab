@@ -186,13 +186,13 @@ public class MainControl implements Initializable {
             public void handle(MouseEvent me) {
                 NodeControl item = new NodeControl();
                 Computer computer = new Computer();
-                AnimationControl anime = new AnimationControl();
+//                AnimationControl anime = new AnimationControl();
                 if (getButtonPress().equals("edit")) {
                     try {
                         final ImageView obj = item.criarItem(me.getX(), me.getY(), itemSetPress);
                         obj.setUserData(computer);
                         mainPane.getChildren().add(obj);
-                        //anime.applyAnimation(mainPane);
+                        
                         item.manipulaItem(obj);
                         item.setButtonPress("edit");
                         

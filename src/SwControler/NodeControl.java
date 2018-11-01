@@ -6,7 +6,6 @@
 package SwControler;
 
 import static SwControler.MainControl.mainPane;
-import SwModel.Computer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.animation.KeyFrame;
@@ -47,6 +46,7 @@ public class NodeControl {
 
     protected void manipulaItem(Node node) {
         final Posicao novaPosicao = new Posicao();
+        AnimationControl anime = new AnimationControl();
 
         //O comando setOnMouseEntered executa uma ação ao passar o mouse por
         //sobre o componente Node, no caso abaixo, altero o cursor do mouse
@@ -69,7 +69,7 @@ public class NodeControl {
             timeE.play();
             setButtonPress(MainControl.getButtonPress());
             setPosition(mainPane.getChildren().indexOf(node));
-            System.out.println("" + mainPane.getChildren().get(position).getLayoutX());
+            
         });
         //O comando setOnMouseExited executa uma ação ao passar o mouse por
         //sobre o componente Node, no caso abaixo, altero o cursor do mouse
@@ -110,7 +110,8 @@ public class NodeControl {
                 return;
             }
             if (buttonPress.equals("play")) {
-                Main.alternaTela("prop");
+                //Main.alternaTela("prop");
+                anime.applyAnimation(mainPane,mainPane.getChildren().get(position).getLayoutX(), mainPane.getChildren().get(position).getLayoutY() );
                 //mainPane.getChildren().get(position);
             }
             novaPosicao.x = me.getX();

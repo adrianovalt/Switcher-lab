@@ -21,11 +21,11 @@ import javafx.util.Duration;
  */
 public class AnimationControl {
 
-private Path gerarPercurso(final double pathOpacity)
+private Path gerarPercurso(final double pathOpacity, double x, double y)
    {
       final Path percurso = new Path();
       //definir coordenadas em MoveTo(X,Y) onde se encontra o nó de origem
-      percurso.getElements().add(new MoveTo(50,20));
+      percurso.getElements().add(new MoveTo(x+36,y+36));
       //definir coordenadas em LineTo(X,Y) onde se encontra o nó de destino
       percurso.getElements().add(new LineTo(450,350));
       percurso.setOpacity(pathOpacity);
@@ -45,11 +45,11 @@ private Path gerarPercurso(final double pathOpacity)
       return percursoTransicao;
    }
    
-   protected void applyAnimation(final Pane pane)
+   protected void applyAnimation(final Pane pane, double x, double y)
    {
-      final Circle circle = new Circle(50, 20, 15);
+      final Circle circle = new Circle(x+36, y+36, 10);
       circle.setFill(Color.GREEN);
-      final Path path = gerarPercurso(0);
+      final Path path = gerarPercurso(0, x, y);
       pane.getChildren().add(path);
       pane.getChildren().add(circle);
       final PathTransition transition = gerarPercursoTransicao(circle, path);
